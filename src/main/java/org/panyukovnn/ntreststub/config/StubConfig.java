@@ -1,31 +1,33 @@
 package org.panyukovnn.ntreststub.config;
 
+import lombok.extern.slf4j.Slf4j;
+import org.panyukovnn.ntreststub.property.StubProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Objects;
 
+@Slf4j
 @Configuration
 public class StubConfig {
-
-    private static final String RESPONSE_FILE = "/response.json";
 
     /**
      * Ответ, возвращаемый заглушкой.
      *
      * @return ответ
-     * @throws IOException исключение
-     * @throws URISyntaxException исключение
      */
     @Bean
-    public byte[] defaultResponse() throws IOException, URISyntaxException {
-        URI responseFileUri = Objects.requireNonNull(getClass().getResource(RESPONSE_FILE)).toURI();
+    public byte[] defaultResponse(StubProperty stubProperty) {
+        try {
+            byte[] response = Files.readAllBytes(Paths.get(stubProperty.getResponseFilePath()));
 
-        return Files.readAllBytes(Paths.get(responseFileUri));
+            log.info("В память загружен заготовленный ответ из файла: " + stubProperty.getResponseFilePath());
+
+            return response;
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Не удалось прочитать заготовленный ответ из файла: " + stubProperty.getResponseFilePath(), e);
+        }
     }
 }

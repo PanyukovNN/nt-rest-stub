@@ -2,7 +2,8 @@ server:
   port: 5000
 
 stub:
-  delay-ms: 1500
+  delay-ms: 1500 # Задержка ответа
+  response-file-path: ./response.json # Путь к файлу с готовым ответом
 
 logging:
   level:
