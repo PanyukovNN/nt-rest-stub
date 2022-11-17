@@ -1,28 +1,32 @@
 package org.panyukovnn.ntreststub.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.panyukovnn.ntreststub.property.StubProperty;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class StubController {
 
-    @Value("${stub.delayMs:false}")
-    private int delayMs;
+    private final byte[] defaultResponse;
+    private final StubProperty stubProperty;
 
-    @PostMapping(value = "/**", consumes = APPLICATION_JSON_VALUE)
-    public Mono<byte[]> post(@RequestBody byte[] body) {
+    /**
+     * Общий эндпоинт для любого типа запросов, возвращающий заготовленный ответ с заданной задержкой.
+     *
+     * @return заготовленный ответ
+     */
+    @RequestMapping(value = "/mock")
+    public Mono<byte[]> mock() {
         log.debug("Request received.");
 
-        return Mono.just(body)
-                .delaySubscription(Duration.ofMillis(delayMs));
+        return Mono.just(defaultResponse)
+                .delaySubscription(Duration.ofMillis(stubProperty.getDelayMs()));
     }
 }

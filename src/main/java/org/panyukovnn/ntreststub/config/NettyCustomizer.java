@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import static io.netty.handler.timeout.IdleStateEvent.WRITER_IDLE_STATE_EVENT;
 
 /**
- * Дополнительная конфигурация Netty
+ * Дополнительная конфигурация Netty.
  */
 @Slf4j
 @Component

@@ -2,9 +2,8 @@ server:
   port: 5000
 
 stub:
-  delayMs: 1500
+  delay-ms: 1500
 
 logging:
   level:
-    org:
-      panyukovnn: INFO
+    org.panyukovnn: INFO
